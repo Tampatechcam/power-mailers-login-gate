@@ -30,6 +30,9 @@ const Index = () => {
       title: "Success",
       description: "Login successful!",
     });
+    
+    // Redirect to dashboard after successful login
+    navigate("/dashboard");
   };
 
   return (
