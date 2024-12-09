@@ -9,7 +9,93 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      advisor_data: {
+        Row: {
+          Bio: string | null
+          Collaborators: string | null
+          "Company ID": string
+          Disclaimer: string | null
+          "E-mail": string | null
+          "First Name": string | null
+          "Last name": string | null
+          "QR Code": string | null
+          "Registration Phone number": string | null
+          "Speaker Name": string | null
+          "Website Registration": string | null
+        }
+        Insert: {
+          Bio?: string | null
+          Collaborators?: string | null
+          "Company ID": string
+          Disclaimer?: string | null
+          "E-mail"?: string | null
+          "First Name"?: string | null
+          "Last name"?: string | null
+          "QR Code"?: string | null
+          "Registration Phone number"?: string | null
+          "Speaker Name"?: string | null
+          "Website Registration"?: string | null
+        }
+        Update: {
+          Bio?: string | null
+          Collaborators?: string | null
+          "Company ID"?: string
+          Disclaimer?: string | null
+          "E-mail"?: string | null
+          "First Name"?: string | null
+          "Last name"?: string | null
+          "QR Code"?: string | null
+          "Registration Phone number"?: string | null
+          "Speaker Name"?: string | null
+          "Website Registration"?: string | null
+        }
+        Relationships: []
+      }
+      registrant_data: {
+        Row: {
+          "Company ID": string | null
+          Created: string | null
+          Email: string | null
+          "First Name": string | null
+          "Last Activity": string | null
+          "Last Appointment": string | null
+          "Last Name": string | null
+          "Name of guest": string | null
+          Phone: number | null
+          "Registrant ID": string
+          "Select Class": string | null
+          Tags: string | null
+        }
+        Insert: {
+          "Company ID"?: string | null
+          Created?: string | null
+          Email?: string | null
+          "First Name"?: string | null
+          "Last Activity"?: string | null
+          "Last Appointment"?: string | null
+          "Last Name"?: string | null
+          "Name of guest"?: string | null
+          Phone?: number | null
+          "Registrant ID": string
+          "Select Class"?: string | null
+          Tags?: string | null
+        }
+        Update: {
+          "Company ID"?: string | null
+          Created?: string | null
+          Email?: string | null
+          "First Name"?: string | null
+          "Last Activity"?: string | null
+          "Last Appointment"?: string | null
+          "Last Name"?: string | null
+          "Name of guest"?: string | null
+          Phone?: number | null
+          "Registrant ID"?: string
+          "Select Class"?: string | null
+          Tags?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
