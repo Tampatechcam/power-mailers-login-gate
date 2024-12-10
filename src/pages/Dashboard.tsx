@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { differenceInDays } from 'date-fns';
 import { useState } from "react";
-import { SummaryCards } from "@/components/dashboard/SummaryCards";
-import { 
+import { SummaryMetrics } from "@/components/dashboard/SummaryMetrics";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -120,15 +120,11 @@ const Dashboard = () => {
     }
   });
 
-  const totalAdvisors = advisorData?.length || 0;
-  const totalRegistrants = registrantData?.length || 0;
-  const totalEvents = eventData?.length || 0;
-
   const calculateDaysUntilNextEvent = () => {
     if (!eventData || eventData.length === 0) return 0;
     const upcomingEvents = eventData
       .filter(event => event["First Event Date"])
-      .sort((a, b) => new Date(a["First Event Date"]) - new Date(b["First Event Date"]));
+      .sort((a, b) => new Date(a["First Event Date"]).getTime() - new Date(b["First Event Date"]).getTime());
     if (upcomingEvents.length === 0) return 0;
     return differenceInDays(new Date(upcomingEvents[0]["First Event Date"]), new Date());
   };
@@ -144,6 +140,19 @@ const Dashboard = () => {
 
   const countInvoicesDue = () => {
     return 3; // This would normally be calculated based on actual invoice data
+  };
+
+  const getInvoiceStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'paid':
+        return 'bg-green-100 text-green-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'unpaid':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
   };
 
   return (
@@ -179,7 +188,7 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <SummaryCards
+            <SummaryMetrics
               showSampleData={showSampleData}
               upcomingEvents={countUpcomingEvents()}
               totalRegistrants={registrantData?.length || 0}
