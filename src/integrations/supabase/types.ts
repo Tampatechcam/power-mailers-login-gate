@@ -13,47 +13,102 @@ export type Database = {
         Row: {
           Bio: string | null
           Collaborators: string | null
-          "Company ID": string
+          company_id: string
           Disclaimer: string | null
           "E-mail": string | null
           "First Name": string | null
           "Last name": string | null
-          "QR Code": string | null
           "Registration Phone number": string | null
           "Speaker Name": string | null
-          "Website Registration": string | null
+          user_id: string
+          "Website Registration": string
         }
         Insert: {
           Bio?: string | null
           Collaborators?: string | null
-          "Company ID": string
+          company_id: string
           Disclaimer?: string | null
           "E-mail"?: string | null
           "First Name"?: string | null
           "Last name"?: string | null
-          "QR Code"?: string | null
           "Registration Phone number"?: string | null
           "Speaker Name"?: string | null
-          "Website Registration"?: string | null
+          user_id: string
+          "Website Registration": string
         }
         Update: {
           Bio?: string | null
           Collaborators?: string | null
-          "Company ID"?: string
+          company_id?: string
           Disclaimer?: string | null
           "E-mail"?: string | null
           "First Name"?: string | null
           "Last name"?: string | null
-          "QR Code"?: string | null
           "Registration Phone number"?: string | null
           "Speaker Name"?: string | null
+          user_id?: string
+          "Website Registration"?: string
+        }
+        Relationships: []
+      }
+      advisor_events: {
+        Row: {
+          "Additional Services": string | null
+          "Building and Room Number": string | null
+          company_id: string
+          "Event ID": string
+          "Event time": string | null
+          "Event Time": string | null
+          "First Event Date": string | null
+          "Full Street Address": string | null
+          "Mail Piece": string | null
+          "Mailing Quantity": number | null
+          "Second Event Date": string | null
+          "Speaker Name": string | null
+          user_id: string | null
+          "Venue Name": string | null
+          "Website Registration": string | null
+        }
+        Insert: {
+          "Additional Services"?: string | null
+          "Building and Room Number"?: string | null
+          company_id: string
+          "Event ID": string
+          "Event time"?: string | null
+          "Event Time"?: string | null
+          "First Event Date"?: string | null
+          "Full Street Address"?: string | null
+          "Mail Piece"?: string | null
+          "Mailing Quantity"?: number | null
+          "Second Event Date"?: string | null
+          "Speaker Name"?: string | null
+          user_id?: string | null
+          "Venue Name"?: string | null
+          "Website Registration"?: string | null
+        }
+        Update: {
+          "Additional Services"?: string | null
+          "Building and Room Number"?: string | null
+          company_id?: string
+          "Event ID"?: string
+          "Event time"?: string | null
+          "Event Time"?: string | null
+          "First Event Date"?: string | null
+          "Full Street Address"?: string | null
+          "Mail Piece"?: string | null
+          "Mailing Quantity"?: number | null
+          "Second Event Date"?: string | null
+          "Speaker Name"?: string | null
+          user_id?: string | null
+          "Venue Name"?: string | null
           "Website Registration"?: string | null
         }
         Relationships: []
       }
       registrant_data: {
         Row: {
-          "Company ID": string | null
+          "Company ID": string
+          Company_ID: string | null
           Created: string | null
           Email: string | null
           "First Name": string | null
@@ -67,7 +122,8 @@ export type Database = {
           Tags: string | null
         }
         Insert: {
-          "Company ID"?: string | null
+          "Company ID": string
+          Company_ID?: string | null
           Created?: string | null
           Email?: string | null
           "First Name"?: string | null
@@ -81,7 +137,8 @@ export type Database = {
           Tags?: string | null
         }
         Update: {
-          "Company ID"?: string | null
+          "Company ID"?: string
+          Company_ID?: string | null
           Created?: string | null
           Email?: string | null
           "First Name"?: string | null

@@ -18,24 +18,48 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-const mockData = [
-  { month: 'Jan', mailings: 4000 },
-  { month: 'Feb', mailings: 3000 },
-  { month: 'Mar', mailings: 2000 },
-  { month: 'Apr', mailings: 2780 },
-  { month: 'May', mailings: 1890 },
-  { month: 'Jun', mailings: 2390 },
-];
-
-const mockClients = [
-  { name: "John Smith", campaign: "Retirement Planning", status: "Active", lastMailing: "2024-02-15" },
-  { name: "Sarah Johnson", campaign: "401k Rollover", status: "Pending", lastMailing: "2024-02-10" },
-  { name: "Michael Brown", campaign: "Estate Planning", status: "Active", lastMailing: "2024-02-08" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  const { data: advisorData } = useQuery({
+    queryKey: ['advisorData'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('advisor_data')
+        .select('*');
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const { data: registrantData } = useQuery({
+    queryKey: ['registrantData'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('registrant_data')
+        .select('*');
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const { data: eventData } = useQuery({
+    queryKey: ['eventData'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('advisor_events')
+        .select('*');
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const totalAdvisors = advisorData?.length || 0;
+  const totalRegistrants = registrantData?.length || 0;
+  const totalEvents = eventData?.length || 0;
 
   return (
     <SidebarProvider>
@@ -63,87 +87,58 @@ const Dashboard = () => {
               {/* Summary Cards */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Total Clients</CardTitle>
-                  <CardDescription>Active client campaigns</CardDescription>
+                  <CardTitle>Total Advisors</CardTitle>
+                  <CardDescription>Active advisors</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">127</p>
+                  <p className="text-3xl font-bold">{totalAdvisors}</p>
                 </CardContent>
               </Card>
               
               <Card>
                 <CardHeader>
-                  <CardTitle>Mailings Sent</CardTitle>
-                  <CardDescription>Last 30 days</CardDescription>
+                  <CardTitle>Total Registrants</CardTitle>
+                  <CardDescription>Across all events</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">2,847</p>
+                  <p className="text-3xl font-bold">{totalRegistrants}</p>
                 </CardContent>
               </Card>
               
               <Card>
                 <CardHeader>
-                  <CardTitle>Response Rate</CardTitle>
-                  <CardDescription>Average this month</CardDescription>
+                  <CardTitle>Total Events</CardTitle>
+                  <CardDescription>All scheduled events</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">4.2%</p>
+                  <p className="text-3xl font-bold">{totalEvents}</p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Charts Section */}
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Mailing Performance</CardTitle>
-                <CardDescription>Number of mailings sent per month</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={mockData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="mailings" fill="#1a365d" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Clients Table */}
+            {/* Recent Events Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Recent Campaigns</CardTitle>
-                <CardDescription>Latest client mailing campaigns</CardDescription>
+                <CardTitle>Recent Events</CardTitle>
+                <CardDescription>Latest scheduled events</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Client Name</TableHead>
-                      <TableHead>Campaign Type</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Last Mailing</TableHead>
+                      <TableHead>Event ID</TableHead>
+                      <TableHead>Venue</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Mailing Quantity</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockClients.map((client) => (
-                      <TableRow key={client.name}>
-                        <TableCell className="font-medium">{client.name}</TableCell>
-                        <TableCell>{client.campaign}</TableCell>
-                        <TableCell>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            client.status === "Active" 
-                              ? "bg-green-100 text-green-800" 
-                              : "bg-yellow-100 text-yellow-800"
-                          }`}>
-                            {client.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>{client.lastMailing}</TableCell>
+                    {eventData?.slice(0, 5).map((event) => (
+                      <TableRow key={event["Event ID"]}>
+                        <TableCell className="font-medium">{event["Event ID"]}</TableCell>
+                        <TableCell>{event["Venue Name"]}</TableCell>
+                        <TableCell>{event["First Event Date"]}</TableCell>
+                        <TableCell>{event["Mailing Quantity"]}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
