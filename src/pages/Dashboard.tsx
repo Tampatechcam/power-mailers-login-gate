@@ -1,19 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { differenceInDays } from 'date-fns';
 import { useState } from "react";
+import { SummaryCards } from "@/components/dashboard/SummaryCards";
 
 const COMPANY_ID = "Core Financial Management";
 
@@ -33,18 +19,24 @@ const sampleUpcomingEvents = [
     registrants: 45,
     firstEventDate: "2024-12-03",
     invoiceStatus: "Paid",
+    venue: "Latrobe Public Library",
+    address: "1234 Library Way, Latrobe, PA",
   },
   {
     eventId: "Downtown Center 12/10",
     registrants: 32,
     firstEventDate: "2024-12-10",
     invoiceStatus: "Pending",
+    venue: "Downtown Business Center",
+    address: "567 Main Street, Suite 200",
   },
   {
     eventId: "Community Hall 12/15",
     registrants: 28,
     firstEventDate: "2024-12-15",
     invoiceStatus: "Unpaid",
+    venue: "Westview Community Hall",
+    address: "890 Park Avenue",
   },
 ];
 
@@ -169,40 +161,13 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Total Advisors</CardTitle>
-                  <CardDescription>Active advisors</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold">{totalAdvisors}</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Total Registrants</CardTitle>
-                  <CardDescription>Across all events</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold">{totalRegistrants}</p>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Total Events</CardTitle>
-                  <CardDescription>All scheduled events</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold">{totalEvents}</p>
-                </CardContent>
-              </Card>
-            </div>
+            <SummaryCards
+              showSampleData={showSampleData}
+              totalAdvisors={totalAdvisors}
+              totalRegistrants={totalRegistrants}
+              totalEvents={totalEvents}
+            />
 
-            {/* Upcoming Events Overview */}
             <Card className="mb-8">
               <CardHeader>
                 <CardTitle>Upcoming Events</CardTitle>
