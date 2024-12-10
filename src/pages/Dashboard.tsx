@@ -17,41 +17,45 @@ import {
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useNavigate } from "react-router-dom";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+
+const COMPANY_ID = "Core Financial Management";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const { data: advisorData } = useQuery({
-    queryKey: ['advisorData'],
+    queryKey: ['advisorData', COMPANY_ID],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('advisor_data')
-        .select('*');
+        .select('*')
+        .eq('company_id', COMPANY_ID);
       if (error) throw error;
       return data;
     }
   });
 
   const { data: registrantData } = useQuery({
-    queryKey: ['registrantData'],
+    queryKey: ['registrantData', COMPANY_ID],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('registrant_data')
-        .select('*');
+        .select('*')
+        .eq('Company ID', COMPANY_ID);
       if (error) throw error;
       return data;
     }
   });
 
   const { data: eventData } = useQuery({
-    queryKey: ['eventData'],
+    queryKey: ['eventData', COMPANY_ID],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('advisor_events')
-        .select('*');
+        .select('*')
+        .eq('company_id', COMPANY_ID);
       if (error) throw error;
       return data;
     }
@@ -72,7 +76,10 @@ const Dashboard = () => {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <SidebarTrigger />
-                  <h1 className="text-2xl font-bold text-gray-900">Client Dashboard</h1>
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900">Client Dashboard</h1>
+                    <p className="text-sm text-gray-500">{COMPANY_ID}</p>
+                  </div>
                 </div>
                 <Button variant="outline" onClick={() => navigate("/")}>
                   Sign Out
@@ -120,7 +127,7 @@ const Dashboard = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Recent Events</CardTitle>
-                <CardDescription>Latest scheduled events</CardDescription>
+                <CardDescription>Latest scheduled events for {COMPANY_ID}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
