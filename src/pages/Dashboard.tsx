@@ -124,23 +124,26 @@ const Dashboard = () => {
   const totalRegistrants = registrantData?.length || 0;
   const totalEvents = eventData?.length || 0;
 
-  const getInvoiceStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'paid':
-        return 'bg-green-500';
-      case 'pending':
-        return 'bg-yellow-500';
-      case 'unpaid':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-500';
-    }
+  const calculateDaysUntilNextEvent = () => {
+    if (!eventData || eventData.length === 0) return 0;
+    const upcomingEvents = eventData
+      .filter(event => event["First Event Date"])
+      .sort((a, b) => new Date(a["First Event Date"]) - new Date(b["First Event Date"]));
+    if (upcomingEvents.length === 0) return 0;
+    return differenceInDays(new Date(upcomingEvents[0]["First Event Date"]), new Date());
   };
 
-  const calculateDaysUntil = (date: string) => {
-    const eventDate = new Date(date);
+  const countUpcomingEvents = () => {
+    if (!eventData) return 0;
     const today = new Date();
-    return differenceInDays(eventDate, today);
+    return eventData.filter(event => {
+      const eventDate = new Date(event["First Event Date"]);
+      return eventDate > today;
+    }).length;
+  };
+
+  const countInvoicesDue = () => {
+    return 3; // This would normally be calculated based on actual invoice data
   };
 
   return (
@@ -178,9 +181,10 @@ const Dashboard = () => {
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <SummaryCards
               showSampleData={showSampleData}
-              totalAdvisors={totalAdvisors}
-              totalRegistrants={totalRegistrants}
-              totalEvents={totalEvents}
+              upcomingEvents={countUpcomingEvents()}
+              totalRegistrants={registrantData?.length || 0}
+              daysUntilNextEvent={calculateDaysUntilNextEvent()}
+              invoicesDue={countInvoicesDue()}
             />
 
             <Card className="mb-8">
@@ -202,8 +206,8 @@ const Dashboard = () => {
                         <div className="text-right">
                           <p className="text-sm font-medium">
                             {showSampleData 
-                              ? `${calculateDaysUntil(event.firstEventDate)} days` 
-                              : `${calculateDaysUntil(event["First Event Date"])} days`}
+                              ? `${calculateDaysUntilNextEvent(event.firstEventDate)} days` 
+                              : `${calculateDaysUntilNextEvent(event["First Event Date"])} days`}
                           </p>
                           <p className="text-xs text-gray-500">Until event</p>
                         </div>
@@ -347,4 +351,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

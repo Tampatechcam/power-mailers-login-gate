@@ -8,33 +8,36 @@ import {
 
 interface SummaryCardsProps {
   showSampleData: boolean;
-  totalAdvisors: number;
+  upcomingEvents: number;
   totalRegistrants: number;
-  totalEvents: number;
+  daysUntilNextEvent: number;
+  invoicesDue: number;
 }
 
 export const SummaryCards = ({ 
   showSampleData,
-  totalAdvisors,
+  upcomingEvents,
   totalRegistrants,
-  totalEvents,
+  daysUntilNextEvent,
+  invoicesDue,
 }: SummaryCardsProps) => {
   const sampleData = {
-    advisors: 12,
+    upcomingEvents: 5,
     registrants: 245,
-    events: 8,
+    daysUntilNext: 7,
+    invoicesDue: 3,
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
       <Card>
         <CardHeader>
-          <CardTitle>Total Advisors</CardTitle>
-          <CardDescription>Active advisors</CardDescription>
+          <CardTitle>Upcoming Events</CardTitle>
+          <CardDescription>Scheduled events</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-bold">
-            {showSampleData ? sampleData.advisors : totalAdvisors}
+            {showSampleData ? sampleData.upcomingEvents : upcomingEvents}
           </p>
         </CardContent>
       </Card>
@@ -53,12 +56,24 @@ export const SummaryCards = ({
       
       <Card>
         <CardHeader>
-          <CardTitle>Total Events</CardTitle>
-          <CardDescription>All scheduled events</CardDescription>
+          <CardTitle>Days Until Next</CardTitle>
+          <CardDescription>Next scheduled event</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-bold">
-            {showSampleData ? sampleData.events : totalEvents}
+            {showSampleData ? sampleData.daysUntilNext : daysUntilNextEvent}
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Invoices Due</CardTitle>
+          <CardDescription>Pending payments</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-3xl font-bold">
+            {showSampleData ? sampleData.invoicesDue : invoicesDue}
           </p>
         </CardContent>
       </Card>
