@@ -109,6 +109,19 @@ const Dashboard = () => {
     }
   });
 
+  // Restore the eventData query
+  const { data: eventData } = useQuery({
+    queryKey: ['eventData', COMPANY_ID],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('advisor_events')
+        .select('*')
+        .eq('company_id', COMPANY_ID);
+      if (error) throw error;
+      return data;
+    }
+  });
+
   // New query for sample registrant data
   const { data: sampleRegistrantData } = useQuery({
     queryKey: ['sampleRegistrantData', SAMPLE_COMPANY_ID],
@@ -219,8 +232,8 @@ const Dashboard = () => {
                         <div className="text-right">
                           <p className="text-sm font-medium">
                             {showSampleData 
-                              ? `${calculateDaysUntilNextEvent(event.firstEventDate)} days` 
-                              : `${calculateDaysUntilNextEvent(event["First Event Date"])} days`}
+                              ? differenceInDays(new Date(event.firstEventDate), new Date())
+                              : differenceInDays(new Date(event["First Event Date"]), new Date())} days
                           </p>
                           <p className="text-xs text-gray-500">Until event</p>
                         </div>
