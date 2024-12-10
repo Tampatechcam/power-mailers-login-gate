@@ -9,6 +9,21 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { differenceInDays } from 'date-fns';
 import { useState } from "react";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const COMPANY_ID = "Core Financial Management";
 
@@ -332,3 +347,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
