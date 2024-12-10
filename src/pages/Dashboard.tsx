@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table";
 
 const COMPANY_ID = "Core Financial Management";
+const SAMPLE_COMPANY_ID = "Eagle Financial Solutions";
 
 // Sample data for demonstration
 const sampleUpcomingEvents = [
@@ -108,13 +109,16 @@ const Dashboard = () => {
     }
   });
 
-  const { data: eventData } = useQuery({
-    queryKey: ['eventData', COMPANY_ID],
+  // New query for sample registrant data
+  const { data: sampleRegistrantData } = useQuery({
+    queryKey: ['sampleRegistrantData', SAMPLE_COMPANY_ID],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('advisor_events')
+        .from('registrant_data')
         .select('*')
-        .eq('company_id', COMPANY_ID);
+        .eq('Company ID', SAMPLE_COMPANY_ID)
+        .order('Created', { ascending: false })
+        .limit(5);
       if (error) throw error;
       return data;
     }
@@ -295,7 +299,7 @@ const Dashboard = () => {
             <Card className="mb-8">
               <CardHeader>
                 <CardTitle>New Registrants</CardTitle>
-                <CardDescription>Latest registrations for {COMPANY_ID}</CardDescription>
+                <CardDescription>Latest registrations for {showSampleData ? SAMPLE_COMPANY_ID : COMPANY_ID}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -308,7 +312,7 @@ const Dashboard = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {registrantData?.map((registrant) => (
+                    {(showSampleData ? sampleRegistrantData : registrantData)?.map((registrant) => (
                       <TableRow key={registrant["Registrant ID"]}>
                         <TableCell className="font-medium">
                           {registrant["First Name"]} {registrant["Last Name"]}
