@@ -43,7 +43,9 @@ const Dashboard = () => {
       const { data, error } = await supabase
         .from('registrant_data')
         .select('*')
-        .eq('Company ID', COMPANY_ID);
+        .eq('Company ID', COMPANY_ID)
+        .order('Created', { ascending: false })
+        .limit(5);
       if (error) throw error;
       return data;
     }
@@ -122,6 +124,38 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Recent Registrants Table */}
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>New Registrants</CardTitle>
+                <CardDescription>Latest registrations for {COMPANY_ID}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Registration Date</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {registrantData?.map((registrant) => (
+                      <TableRow key={registrant["Registrant ID"]}>
+                        <TableCell className="font-medium">
+                          {registrant["First Name"]} {registrant["Last Name"]}
+                        </TableCell>
+                        <TableCell>{registrant["Email"]}</TableCell>
+                        <TableCell>{registrant["Phone"]}</TableCell>
+                        <TableCell>{new Date(registrant["Created"]).toLocaleDateString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
 
             {/* Recent Events Table */}
             <Card>
